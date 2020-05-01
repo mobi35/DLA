@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using DLA_Thesis.Data.Model;
 using DLA_Thesis.Data.Model.Interface;
+using DLA_Thesis.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,13 +12,17 @@ namespace DLA_Thesis.Controllers
 {
     public class StudentController : Controller
     {
+        private readonly IFeeRepository feeRepo;
+        private readonly IBillingRepository billingRepo;
         private readonly IGradeRepository gradeRepo;
         private readonly ITeacherRepository teacherRepo;
         private readonly IHostingEnvironment hostingEnvironment;
         private readonly IStudentRepository studentRepo;
 
-        public StudentController(IGradeRepository gradeRepo,  ITeacherRepository teacherRepo, IHostingEnvironment hostingEnvironment, IStudentRepository studentRepo)
+        public StudentController(IFeeRepository feeRepo, IBillingRepository billingRepo, IGradeRepository gradeRepo,  ITeacherRepository teacherRepo, IHostingEnvironment hostingEnvironment, IStudentRepository studentRepo)
         {
+            this.feeRepo = feeRepo;
+            this.billingRepo = billingRepo;
             this.gradeRepo = gradeRepo;
             this.teacherRepo = teacherRepo;
             this.hostingEnvironment = hostingEnvironment;
@@ -42,6 +47,26 @@ namespace DLA_Thesis.Controllers
             return Json(user);
         }
 
+        [HttpGet]
+        public JsonResult GetFees(string username, int currentLevel)
+        {
+            List<BillingAndFee> billingAndFee = new List<BillingAndFee>();
+
+            foreach (var b in billingRepo.GetAll().Where(a => a.LRN == username && a.Grade == currentLevel).ToList())
+            {
+                if (feeRepo.FindFee(a => a.FeeID == b.FeeID) != null) { 
+                billingAndFee.Add(new BillingAndFee
+                {
+                    Billing = b,
+                    Fee = feeRepo.FindFee(a => a.FeeID == b.FeeID)
+                });
+                }
+            }
+
+          //  var billing = billingRepo.GetAll().ToList();
+
+            return Json(billingAndFee);
+        }
 
         [HttpPost]
         public string UpdateAccount(Student student)

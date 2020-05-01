@@ -1,23 +1,23 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Stephen\\Desktop\\updated\\DLA\\DLA_Thesis\\DLA_Thesis.csproj": {}
+    "C:\\Users\\Adrian Radores\\Desktop\\Gits\\dla\\DLA_Thesis\\DLA_Thesis.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Stephen\\Desktop\\updated\\DLA\\DLA_Thesis\\DLA_Thesis.csproj": {
+    "C:\\Users\\Adrian Radores\\Desktop\\Gits\\dla\\DLA_Thesis\\DLA_Thesis.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Stephen\\Desktop\\updated\\DLA\\DLA_Thesis\\DLA_Thesis.csproj",
+        "projectUniqueName": "C:\\Users\\Adrian Radores\\Desktop\\Gits\\dla\\DLA_Thesis\\DLA_Thesis.csproj",
         "projectName": "DLA_Thesis",
-        "projectPath": "C:\\Users\\Stephen\\Desktop\\updated\\DLA\\DLA_Thesis\\DLA_Thesis.csproj",
-        "packagesPath": "C:\\Users\\Stephen\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Stephen\\Desktop\\updated\\DLA\\DLA_Thesis\\obj\\",
+        "projectPath": "C:\\Users\\Adrian Radores\\Desktop\\Gits\\dla\\DLA_Thesis\\DLA_Thesis.csproj",
+        "packagesPath": "C:\\Users\\Adrian Radores\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Adrian Radores\\Desktop\\Gits\\dla\\DLA_Thesis\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
         ],
         "configFilePaths": [
-          "C:\\Users\\Stephen\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Adrian Radores\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [

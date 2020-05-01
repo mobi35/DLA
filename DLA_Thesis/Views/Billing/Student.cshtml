@@ -4,6 +4,37 @@
     Layout = "~/Views/Shared/adminLayout.cshtml";
 }
 
+
+<div class="modal fade" id="assesmentModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div style="padding:1%;" class="modal-content">
+            <center>  <h3>Assesment</h3> </center>
+
+            <form id="enrollment-form" enctype="multipart/form-data">
+                <label>Select Grade</label>
+                <select id="assesmentGrade" class="form-control">
+                    <option value="7">7</option>
+                    <option value="9">8</option>
+                    <option value="9">9</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                </select>
+
+                <input type="hidden" id="assesmentUser" />
+
+                <div id="assesmentShow">
+
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
@@ -91,11 +122,11 @@
 
 
 <script>
-    Date.prototype.addDays = function(days) {
-    var date = new Date(this.valueOf());
-    date.setDate(date.getDate() + days);
-    return date;
-}
+    Date.prototype.addDays = function (days) {
+        var date = new Date(this.valueOf());
+        date.setDate(date.getDate() + days);
+        return date;
+    }
 
     var date = new Date();
 
@@ -109,15 +140,15 @@
         success: function (e) {
             for (var key in Object.keys(e)) {
                 var newDate = new Date(e[key].billedDate);
-                if (date.addDays(15) >= newDate ) {
+                if (date.addDays(15) >= newDate) {
 
-            
-                t += '<tr>';
-                t += '<td>' + e[key].billingID + '</td>';
+
+                    t += '<tr>';
+                    t += '<td>' + e[key].billingID + '</td>';
                     t += '<td>P' + e[key].payment.toFixed(2) + '</td>';
-                    t += '<td>' + e[key].billedDate.substr(0,10)+ '</td>';
-                t += '<td>' + e[key].grade + '</td>';
-                t += '<td>  <button onclick="GetInvoiceDetails(' + e[key].billingID + ')" class="btn btn-neutral" data-toggle="modal" data-target="#myModal">Show Invoice </button></td>';
+                    t += '<td>' + e[key].billedDate.substr(0, 10) + '</td>';
+                    t += '<td>' + e[key].grade + '</td>';
+                    t += '<td>  <button onclick="GetInvoiceDetails(' + e[key].billingID + ')" class="btn btn-neutral" data-toggle="modal" data-target="#myModal">Show Invoice </button></td>';
                     t += '</tr>';
 
                 }
@@ -141,7 +172,9 @@
 
 </script>
 
-
+<button class="btn btn-neutral" data-toggle="modal" data-target="#assesmentModal">
+   Check Assesment
+</button>
 
 <div style="width: 100%; " class="content">
     <div class="row">
@@ -182,7 +215,7 @@
 
                 $('#student_name').text(e.student.firstName + " " + e.student.middleName + " " + e.student.lastName);
                 $('#gradesec').text(e.student.currentGrade);
-                 $('#invoice_number').text(e.billing.billingID);
+                $('#invoice_number').text(e.billing.billingID);
                 $('#address').text(e.student.address);
                 $('#invoiceDate').text(e.billing.billedDate.substr(0, 10));
                 $('#mode').text(e.student.modeOfPayment);
@@ -204,7 +237,6 @@
 
 
 
-    $(document).ready(function () {
 
 
 
@@ -239,6 +271,95 @@
             ]
 
         });
+
+
+        
+        function GetFees(lrn, level) {
+            lrn = sessionStorage.getItem("username");
+         var username = lrn;
+         $('#assesmentUser').val(lrn);
+       
+    $.ajax({
+
+        url: '/Student/GetFees',
+        type: 'get',
+        data: { username: username, currentLevel :level },
+        success: function (e) {
+            var table = "<table style='width:100%;' class='table' id = 'assesmentList' > <thead>  <tr> <th> Payment Type </th>    <th> Billing#  </th>   <th> Status </th>  <th> Billed On </th> <th> Price </th> </tr> </thead> <tbody>";
+               var amount = 0;
+            var unpaid = 0;
+           
+            for (var key in Object.keys(e)) {
+             
+                table += "<tr> <td> " + e[key].fee.paymentName + "  </td>    <td>" + e[key].billing.billingID + " </td>   <td> " + e[key].billing.status + " </td>  <td> " + e[key].billing.billedDate.substr(0,10) + " </td> <td> P" + e[key].billing.payment.toFixed(2) + " </td>    </tr>" ;
+
+                amount += e[key].billing.payment;
+
+                if (e[key].status != "Paid") {
+                    unpaid += e[key].billing.payment;
+                }
+            }
+          
+            table += "<tr> <td> </td>  <td> </td>  <td> </td>  <td> Total </td>  <td> P "+amount.toFixed(2)+" </td>  </tr>";
+               table += "<tr> <td> </td>  <td> </td>  </td>  <td>  <td> Balance </td>  <td> P "+unpaid.toFixed(2)+" </td>  </tr>";
+          table += " </tbody> </table>"
+
+            $('#assesmentShow').html(table);
+
+
+              $('#assesmentList').DataTable({
+
+            responsive: true,
+
+            "lengthMenu": [50, 100, 500, 1000, 2000, 5000, 10000, 50000, 100000],
+            "order": [],
+            "sScrollX": "100%",
+            "scrollCollapse": true,
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css({ 'font-size': '10pt' })
+                            .prepend(
+                                '<img style= src="~/Images/activefinancelogo.png"  style="position:absolute; height:500px; z-index:5000; width:500px; top:0; left:0;" />'
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }, 'excelHtml5', {
+                    extend: 'pdf',
+                    download: 'open',
+                }
+            ]
+
+        });
+
+
+        }
+
+    });
+        }
+
+
+        </script>
+
+<script> 
+
+     $('#assesmentGrade').change(function () {
+
+      $('#assesmentShow').html('');
+        var grade = $(this).val();
+       
+       var userName =  $('#assesmentUser').val();
+
+        GetFees(userName,grade);
+
+    });
 
 
 

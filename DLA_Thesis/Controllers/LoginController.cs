@@ -34,23 +34,16 @@ namespace DLA_Thesis.Controllers
         public JsonResult ExecuteLogin(string userType, string userName, string password)
         {
 
-            if(userType == "student")
-            {
-             
-                var user = studentRepo.FindStudent(a => a.LRN == userName && a.Password == password);
+
+            var teacher = teacherRepo.FindTeacher(a => a.Email == userName && a.Password == password);
+            var user = studentRepo.FindStudent(a => a.LRN == userName && a.Password == password);
                 if (user != null) {
                  
                     return Json(user);
                 }
-                else
-                    return Json("Error");
-            }
-            else
-            {
-                var user = teacherRepo.FindTeacher(a => a.Email == userName && a.Password == password);
-                if (user != null)
+               else if (teacher != null)
                 {
-                    return Json(user);
+                    return Json(teacher);
                 }
                 else
                     return Json("Error");
@@ -58,10 +51,7 @@ namespace DLA_Thesis.Controllers
             }
 
 
-         
 
-
-        }
 
         public string Recover(string email)
         {

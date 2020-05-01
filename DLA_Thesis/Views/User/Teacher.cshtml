@@ -74,7 +74,7 @@
                     <button class="btn" type="button" data-dismiss="modal" aria-hidden="true">Close</button>
                 </div>
                 <div class="modal-body">
-                    
+
                     <small style="color:red">Choose the autocomplete</small><br />
                     <input type="hidden" id="edit_skill_id" />
                     <div class="autocomplete form-group">
@@ -101,10 +101,34 @@
                         <small id="e_skill1_v" style="color:red;"></small>
                     </div>
 
+                    <div class="autocomplete form-group">
+                        <label>Subject 5</label>
+                        <input autocomplete="off" id="e_skill5" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="e_skill1_v" style="color:red;"></small>
+                    </div>
+
+                    <div class="autocomplete form-group">
+                        <label>Subject 6</label>
+                        <input autocomplete="off" id="e_skill6" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="e_skill1_v" style="color:red;"></small>
+                    </div>
+
+                    <div class="autocomplete form-group">
+                        <label>Subject 7</label>
+                        <input autocomplete="off" id="e_skill7" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="e_skill1_v" style="color:red;"></small>
+                    </div>
+
+                    <div class="autocomplete form-group">
+                        <label>Subject 8</label>
+                        <input autocomplete="off" id="e_skill8" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="e_skill1_v" style="color:red;"></small>
+                    </div>
 
 
 
-                  
+
+
 
                 </div>
                 <div class="modal-footer">
@@ -227,6 +251,30 @@
                         <small id="skill1_v" style="color:red;"></small>
                     </div>
 
+                    <div class="autocomplete form-group">
+                        <label>Subject 5</label>
+                        <input autocomplete="off" id="skill5" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="skill1_v" style="color:red;"></small>
+                    </div>
+
+                    <div class="autocomplete form-group">
+                        <label>Subject 6</label>
+                        <input autocomplete="off" id="skill6" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="skill1_v" style="color:red;"></small>
+                    </div>
+
+                    <div class="autocomplete form-group">
+                        <label>Subject 7</label>
+                        <input autocomplete="off" id="skill7" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="skill1_v" style="color:red;"></small>
+                    </div>
+
+                    <div class="autocomplete form-group">
+                        <label>Subject 8</label>
+                        <input autocomplete="off" id="skill8" type="text" name="myCountry" class="form-control" placeholder="">
+                        <small id="skill1_v" style="color:red;"></small>
+                    </div>
+
 
 
 
@@ -346,7 +394,11 @@
         $('#e_skill1').val('');
         $('#e_skill2').val('');
         $('#e_skill3').val('');
-        $('#e_skill4' ).val('');
+        $('#e_skill4').val('');
+        $('#e_skill5').val('');
+        $('#e_skill6').val('');
+        $('#e_skill7').val('');
+           $('#e_skill8' ).val('');
         $('#edit_skill_id').val(id);
         $.ajax({
 
@@ -361,7 +413,10 @@
                    $('#e_skill2').val(arr[1]);
                    $('#e_skill3').val(arr[2]);
                    $('#e_skill4').val(arr[3]);
-
+                $('#e_skill5').val(arr[4]);
+                $('#e_skill6').val(arr[5]);
+                $('#e_skill7').val(arr[6]);
+                  $('#e_skill8').val(arr[7]);
             
             }
 
@@ -375,11 +430,19 @@
             $('#skill2').attr("readonly", true);
             $('#skill3').attr("readonly", true);
             $('#skill4').attr("readonly", true);
+            $('#skill5').attr("readonly", true);
+            $('#skill6').attr("readonly", true);
+            $('#skill7').attr("readonly", true);
+              $('#skill8').attr("readonly", true);
         } else {
             $('#skill1').attr("readonly", false);
             $('#skill2').attr("readonly", false);
             $('#skill3').attr("readonly", false);
             $('#skill4').attr("readonly", false);
+                $('#skill5').attr("readonly", false);
+            $('#skill6').attr("readonly", false);
+            $('#skill7').attr("readonly", false);
+              $('#skill8').attr("readonly", false);
         }
 
     });
@@ -413,6 +476,10 @@
         var level = $('#level').val();
         var skill3 = $('#skill3').val();
         var skill4 = $('#skill4').val();
+        var skill5 = $('#skill5').val();
+        var skill6 = $('#skill6').val();
+        var skill7 = $('#skill7').val();
+         var skill8 = $('#skill8').val();
 
         var skill = skill1;
         if (skill2 != "") {
@@ -424,6 +491,22 @@
 
         if (skill4 != "") {
             skill += "," + skill4;
+        }
+
+        if (skill5 != "") {
+            skill += "," + skill5;
+        }
+
+        if (skill6 != "") {
+            skill += "," + skill6;
+        }
+
+        if (skill7 != "") {
+            skill += "," + skill7;
+        }
+
+        if (skill8 != "") {
+            skill += "," + skill8;
         }
 
         var skillList = skill.split(",").sort();
@@ -502,7 +585,15 @@
         var skill1 = $('#e_skill1').val();
         var skill2 = $('#e_skill2').val();
         var skill3 = $('#e_skill3').val();
-        var skill4 = $('#e_skill4').val();
+         var skill4 = $('#e_skill4').val();
+
+         var skill5 = $('#e_skill5').val();
+
+         var skill6 = $('#e_skill6').val();
+
+         var skill7 = $('#e_skill7').val();
+
+            var skill8 = $('#e_skill8').val();
 
         var skill = skill1;
         if (skill2 != "") {
@@ -514,6 +605,22 @@
 
         if (skill4 != "") {
             skill += "," + skill4;
+         }
+
+          if (skill5 != "") {
+            skill += "," + skill5;
+         }
+
+          if (skill6 != "") {
+            skill += "," + skill6;
+         }
+
+          if (skill7 != "") {
+            skill += "," + skill7;
+         }
+
+          if (skill8 != "") {
+            skill += "," + skill8;
         }
 
 
@@ -738,12 +845,20 @@
             autocomplete(document.getElementById("skill2"), subjects);
             autocomplete(document.getElementById("skill3"), subjects);
             autocomplete(document.getElementById("skill4"), subjects);
+            autocomplete(document.getElementById("skill5"), subjects);
+            autocomplete(document.getElementById("skill6"), subjects);
+            autocomplete(document.getElementById("skill7"), subjects);
+             autocomplete(document.getElementById("skill8"), subjects);
 
 
                autocomplete(document.getElementById("e_skill1"), subjects);
             autocomplete(document.getElementById("e_skill2"), subjects);
             autocomplete(document.getElementById("e_skill3"), subjects);
             autocomplete(document.getElementById("e_skill4"), subjects);
+            autocomplete(document.getElementById("e_skill5"), subjects);
+            autocomplete(document.getElementById("e_skill6"), subjects);
+            autocomplete(document.getElementById("e_skill7"), subjects);
+                autocomplete(document.getElementById("e_skill8"), subjects);
 
         }
 

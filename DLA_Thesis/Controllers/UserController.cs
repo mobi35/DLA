@@ -366,7 +366,7 @@ namespace DLA_Thesis.Controllers
             var student = studentRepo.FindStudent(a => a.StudentID == id);
             student.Status = "Dropped";
             studentRepo.Update(student);
-            return View("Index");
+            return View("Index",  studentRepo.GetAll().OrderByDescending(a => a.StudentID).ToList());
         }
 
         public string AddSection(Student student)

@@ -24,10 +24,37 @@ namespace DLA_Thesis.Controllers
             this.billingRepo = billingRepo;
             this.teacherRepo = teacherRepo;
             this.studentRepo = studentRepo;
+
+           
+
         }
 
         public IActionResult Index()
         {
+
+            foreach (var billing in billingRepo.GetAll().ToList())
+            {
+                var timeDiff = new TimeSpan();
+
+                if (billing.BilledDate < DateTime.Now)
+                {
+                    timeDiff = DateTime.Now - billing.BilledDate;
+                    double totalDays = timeDiff.TotalDays / 7.0;
+
+                    if (totalDays > 1.0 && billing.Payment > 0)
+                    {
+                        double totalInterest = 0.02 * totalDays;
+                        double totalPrice = billing.Payment * totalInterest;
+                        double totalDeduction = billing.Payment + totalPrice;
+
+                     
+                        var billingNewModel = billingRepo.FindBilling(a => a.BillingID == billing.BillingID);
+                        billingNewModel.Payment = Convert.ToInt32(totalDeduction);
+                        billingRepo.Update(billingNewModel);
+                    }
+                }
+            }
+
             return View(billingRepo.GetAll());
         }
 

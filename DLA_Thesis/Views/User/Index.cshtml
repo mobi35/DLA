@@ -8,6 +8,14 @@
     Layout = "~/Views/Shared/adminLayout.cshtml";
 }
 
+    
+
+
+
+
+
+
+
 
 
 <div class="modal fade" id="updateModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -400,12 +408,27 @@
                                 <tr>
                                     <td>@m.LRN</td>
                                     <td>@m.FirstName @m.MiddleName @m.LastName</td>
-                                    <td>@m.CurrentGrade <a asp-action="Levelup" asp-controller="User" asp-route-id="@m.StudentID" onclick="return confirm('are you sure you want to level up the student ?')" class="btn btn-primary"> Level-up </a> </td>
-                                   <td>@{
-                                       if(m.Status == null)
+                                    <td>
+                                        @m.CurrentGrade
+                                        @{  
+                                        if (m.Status != "Dropped")
+                                        {
+
+                                        <a asp-action="Levelup" asp-controller="User" asp-route-id="@m.StudentID" onclick="return confirm('are you sure you want to level up the student ?')" class="btn btn-primary"> Level-up </a>
+                                        
+                                    
+                                    }
+
+                                        }
+                                    </td>
+                                   
+                                    
+                                    <td>@{
+                                       if (m.Status == null)
                                        {
                                            <p>Active</p>
-                                       }else if(m.Status == "Dropped")
+                                       }
+                                       else if (m.Status == "Dropped")
                                        {
                                            <p>Dropped out</p>
                                        }
@@ -415,21 +438,34 @@
 
                                             if (m.SectionID == 0)
                                             {
+
+                                                if (m.Status != "Dropped")
+                                                {
                                                 <button onclick="AddNewSection(@m.LRN)" class="btn btn-neutral" data-toggle="modal" data-target="#addSection">
                                                     Add Section
                                                 </button>
+
+                                                    }
+                                                }
                                             }
-                                        }
                                     </td>
                                     <td>
 
                                         <button onclick="GetUpdateStudent(@m.LRN)" class="btn btn-neutral" data-toggle="modal" data-target="#updateModal">
-                                            View / Update
+                                            View 
                                         </button>
 
-                                        <a onclick="return confirm('are you sure you want to drop this student?')" asp-action="DropOut" asp-controller="User" asp-route-id="@m.StudentID" class="btn btn-neutral" >
-                                            Drop
-                                        </a>
+                                        <button onclick="GetFees(@m.LRN, @m.CurrentGrade)" class="btn btn-neutral" data-toggle="modal" data-target="#assesmentModal">
+                                            Assesment
+                                        </button>
+                                        @{
+                                            if (m.Status != "Dropped")
+                                            {
+                                                <a onclick="return confirm('are you sure you want to drop this student?')" asp-action="DropOut" asp-controller="User" asp-route-id="@m.StudentID" class="btn btn-neutral">
+                                                    Drop
+                                                </a>
+                                            }
+                                        }
                                     </td>
                                 </tr>
                             }
@@ -479,6 +515,78 @@
             $('input[name="GuardianNumber"]').val(e.guardianNumber);
             $('input[name="GuardianOccupation"]').val(e.guardianOccupation);
             $('input[name="Grade"]').val(e.grade);
+
+        }
+
+    });
+    }
+
+
+
+     function GetFees(lrn,level) {
+         var username = lrn;
+         $('#assesmentUser').val(lrn);
+       
+    $.ajax({
+
+        url: '/Student/GetFees',
+        type: 'get',
+        data: { username: username, currentLevel :level },
+        success: function (e) {
+            var table = "<table style='width:100%;' class='table' id = 'assesmentList' > <thead>  <tr> <th> Payment Type </th>    <th> Billing#  </th>   <th> Status </th>  <th> Billed On </th> <th> Price </th> </tr> </thead> <tbody>";
+               var amount = 0;
+            var unpaid = 0;
+           
+            for (var key in Object.keys(e)) {
+             
+                table += "<tr> <td> " + e[key].fee.paymentName + "  </td>    <td>" + e[key].billing.billingID + " </td>   <td> " + e[key].billing.status + " </td>  <td> " + e[key].billing.billedDate.substr(0,10) + " </td> <td> P" + e[key].billing.payment.toFixed(2) + " </td>    </tr>" ;
+
+                amount += e[key].billing.payment;
+
+                if (e[key].status != "Paid") {
+                    unpaid += e[key].billing.payment;
+                }
+            }
+          
+            table += "<tr> <td> </td>  <td> </td>  <td> </td>  <td> Total </td>  <td> P "+amount.toFixed(2)+" </td>  </tr>";
+               table += "<tr> <td> </td>  <td> </td>  </td>  <td>  <td> Balance </td>  <td> P "+unpaid.toFixed(2)+" </td>  </tr>";
+          table += " </tbody> </table>"
+
+            $('#assesmentShow').html(table);
+
+
+              $('#assesmentList').DataTable({
+
+            responsive: true,
+
+            "lengthMenu": [50, 100, 500, 1000, 2000, 5000, 10000, 50000, 100000],
+            "order": [],
+            "sScrollX": "100%",
+            "scrollCollapse": true,
+            dom: 'lBfrtip',
+            buttons: [
+                {
+                    extend: 'print',
+
+                    customize: function (win) {
+                        $(win.document.body)
+                            .css({ 'font-size': '10pt' })
+                            .prepend(
+                                '<img style= src="~/Images/activefinancelogo.png"  style="position:absolute; height:500px; z-index:5000; width:500px; top:0; left:0;" />'
+                            );
+
+                        $(win.document.body).find('table')
+                            .addClass('compact')
+                            .css('font-size', 'inherit');
+                    }
+                }, 'excelHtml5', {
+                    extend: 'pdf',
+                    download: 'open',
+                }
+            ]
+
+        });
+
 
         }
 
@@ -870,6 +978,19 @@
                     }
 
 
+    $('#assesmentGrade').change(function () {
+
+      $('#assesmentShow').html('');
+        var grade = $(this).val();
+       
+       var userName =  $('#assesmentUser').val();
+
+        GetFees(userName,grade);
+
+    });
+
+
+
     $(document).ready(function () {
         $('#userList').DataTable({
 
@@ -903,6 +1024,9 @@
 
         });
     });
+
+
+
 
 </script>
 
