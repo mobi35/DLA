@@ -54,37 +54,24 @@
             </div>
             <div class="sidebar-wrapper">
                 <ul style="display:none;" id="teacher-panel" class="nav">
-                
+
 
                     <li id="assignedsubject">
 
                     </li>
 
-                
-                
 
 
-                
+
+
+
 
                 </ul>
 
 
                 <ul style="display:none;" id="registrar-panel" class="nav">
 
-                    <li id="studentnav">
-                        <a asp-action="Index" asp-controller="User">
-                            <i class="nc-icon nc-single-02"></i>
-                            <p>Student</p>
-                        </a>
-                    </li>
 
-
-                    <li id="teachernav">
-                        <a asp-action="Teacher" asp-controller="User">
-                            <i class="nc-icon nc-single-02"></i>
-                            <p>Employee</p>
-                        </a>
-                    </li>
 
                     <li id="schedulenav">
                         <a asp-action="Index" asp-controller="Schedule">
@@ -101,6 +88,7 @@
                     </li>
 
 
+
                     <li id="schedulenav">
                         <a asp-action="Index" asp-controller="Report">
                             <i class="nc-icon nc-single-02"></i>
@@ -108,20 +96,57 @@
                         </a>
                     </li>
 
-
-
-                </ul>
-
-
-                <ul style="display:none;" id="admin-panel" class="nav">
-
-
                     <li id="subjectnav">
                         <a asp-action="Index" asp-controller="Subject">
                             <i class="nc-icon nc-single-02"></i>
                             <p>Subject</p>
                         </a>
                     </li>
+
+
+                    <li id="sectionnav">
+                        <a asp-action="Index" asp-controller="Section">
+                            <i class="nc-icon nc-single-02"></i>
+                            <p>Section</p>
+                        </a>
+                    </li>
+
+
+                    <li id="roomnav">
+                        <a asp-action="Index" asp-controller="Room">
+                            <i class="nc-icon nc-single-02"></i>
+                            <p>Room</p>
+                        </a>
+                    </li>
+
+
+                </ul>
+
+
+                <ul style="display:none;" id="admin-panel" class="nav">
+                    <li id="dashboardnav">
+                        <a asp-action="Admin" asp-controller="Home">
+                            <i class="nc-icon nc-single-02"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+
+
+                    <li id="studentnav">
+                        <a asp-action="Index" asp-controller="User">
+                            <i class="nc-icon nc-single-02"></i>
+                            <p>Student</p>
+                        </a>
+                    </li>
+
+
+                    <li id="teachernav">
+                        <a asp-action="Teacher" asp-controller="User">
+                            <i class="nc-icon nc-single-02"></i>
+                            <p>Employee</p>
+                        </a>
+                    </li>
+
 
                     <li id="billing">
                         <a asp-action="Index" asp-controller="Billing">
@@ -137,19 +162,6 @@
                         </a>
                     </li>
 
-
-                    <li id="sectionnav">
-                        <a asp-action="Index" asp-controller="Section">
-                            <i class="nc-icon nc-single-02"></i>
-                            <p>Section</p>
-                        </a>
-                    </li>
-                    <li id="subjectnav">
-                        <a asp-action="Index" asp-controller="Room">
-                            <i class="nc-icon nc-single-02"></i>
-                            <p>Room</p>
-                        </a>
-                    </li>
 
 
                 </ul>
@@ -281,7 +293,7 @@
                                 <li>
                                     <a href="#" target="_blank">Divine Light Academy</a>
                                 </li>
-                             
+
                             </ul>
                         </nav>
                         <div class="credits ml-auto">
@@ -340,7 +352,7 @@
         $('#teacher-panel').css("display", "block");
         $('#student-panel').css("display", "none");
 
-             $('#registrar-panel').css("display", "none");
+        $('#registrar-panel').css("display", "none");
         $('#admin-panel').css("display", "none");
 
     }
@@ -348,7 +360,7 @@
     else if (sessionStorage.getItem("role") == "Admin") {
         $('#teacher-panel').css("display", "none");
         $('#student-panel').css("display", "none");
-              $('#registrar-panel').css("display", "none");
+        $('#registrar-panel').css("display", "none");
         $('#admin-panel').css("display", "block");
 
     }
@@ -356,7 +368,7 @@
     else if (sessionStorage.getItem("role") == "Registrar") {
         $('#teacher-panel').css("display", "none");
         $('#student-panel').css("display", "none");
-            $('#registrar-panel').css("display", "block");
+        $('#registrar-panel').css("display", "block");
         $('#admin-panel').css("display", "none");
 
     }
