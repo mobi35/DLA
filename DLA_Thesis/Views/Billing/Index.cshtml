@@ -171,8 +171,8 @@
                   $('#mode').text(e.student.modeOfPayment );
 
                  $('#payname').text(e.fee.paymentName);
-                $('#price').text(e.fee.paymentPrice);
-                 $('#total').text(e.fee.paymentPrice);
+                $('#price').text(e.billing.payment.toFixed(2));
+                 $('#total').text(e.billing.payment.toFixed(2));
 
             }
 

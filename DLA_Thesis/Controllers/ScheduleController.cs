@@ -42,7 +42,7 @@ namespace DLA_Thesis.Controllers
 
         public IActionResult Student()
         {
-          
+
 
 
             return View();
@@ -50,59 +50,60 @@ namespace DLA_Thesis.Controllers
 
         public JsonResult GetSchedule(string username, int grade)
         {
-            try { 
-            List<SchedTeachersViewModel> schedTeachersVM = new List<SchedTeachersViewModel>();
-            var student = studentRepo.FindStudent(a => a.LRN == username);
-            var section = sectionRepo.FindSection(a => a.SectionID == student.SectionID);
-            var schedule = scheduleRepo.GetAll().Where(a => a.Grade == grade && a.SectionName == section.SectionName && a.SectionNumber == section.SectionNumber).ToList();
-
-            foreach (var s in schedule)
+            try
             {
-                schedTeachersVM.Add(new SchedTeachersViewModel()
-                {
-                    Student = student,
-                    Schedule = s,
-                    Section = section,
-                    Teacher = teacherRepo.FindTeacher(a => a.TeacherID == s.TeacherID)
-                });
+                List<SchedTeachersViewModel> schedTeachersVM = new List<SchedTeachersViewModel>();
+                var student = studentRepo.FindStudent(a => a.LRN == username);
+                var section = sectionRepo.FindSection(a => a.SectionID == student.SectionID);
+                var schedule = scheduleRepo.GetAll().Where(a => a.Grade == grade && a.SectionName == section.SectionName && a.SectionNumber == section.SectionNumber).ToList();
 
-            }
+                foreach (var s in schedule)
+                {
+                    schedTeachersVM.Add(new SchedTeachersViewModel()
+                    {
+                        Student = student,
+                        Schedule = s,
+                        Section = section,
+                        Teacher = teacherRepo.FindTeacher(a => a.TeacherID == s.TeacherID)
+                    });
+
+                }
                 return Json(schedTeachersVM);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return Json("error");
             }
-          
+
         }
 
         [HttpPost]
         public string Create(Schedule schedule)
         {
-           //GET SECTION FIRST
+            //GET SECTION FIRST
             var getSection = sectionRepo.FindSection(a => a.SectionID == schedule.SectionNumber);
 
             var checkSchedTeacher = scheduleRepo.
           FindSchedule(a => a.StartTime >= schedule.StartTime && a.EndTime <= schedule.StartTime && a.TeacherID == schedule.TeacherID ||
                        a.EndTime >= schedule.EndTime && a.EndTime <= schedule.EndTime && a.TeacherID == schedule.TeacherID);
-          
+
             if (checkSchedTeacher != null)
                 return "time_discrepancy";
 
 
             var checkSched = scheduleRepo.
-                FindSchedule(a => a.StartTime >= schedule.StartTime && a.EndTime <= schedule.StartTime && a.SectionNumber == getSection.SectionNumber  ||
-                             a.EndTime >= schedule.EndTime && a.EndTime <= schedule.EndTime && a.SectionNumber == getSection.SectionNumber );
+                FindSchedule(a => a.StartTime >= schedule.StartTime && a.EndTime <= schedule.StartTime && a.SectionNumber == getSection.SectionNumber && a.Grade == getSection.Grade ||
+                             a.EndTime >= schedule.EndTime && a.EndTime <= schedule.EndTime && a.SectionNumber == getSection.SectionNumber && a.Grade == getSection.Grade);
             if (checkSched != null)
                 return "time_discrepancy";
 
             schedule.Areas = subjectRepo.FindSubject(a => a.SubjectName == schedule.SubjectName).Areas;
-            var checkSubject = scheduleRepo.FindSchedule(a => a.Areas == schedule.Areas &&  a.SectionNumber == getSection.SectionNumber && a.Grade == schedule.Grade);
+            var checkSubject = scheduleRepo.FindSchedule(a => a.Areas == schedule.Areas && a.SectionNumber == getSection.SectionNumber && a.Grade == schedule.Grade);
 
             schedule.SectionName = getSection.SectionName;
             schedule.SectionNumber = getSection.SectionNumber;
 
-          
+
 
             if (checkSubject != null)
                 return "subject_exist";
@@ -113,7 +114,7 @@ namespace DLA_Thesis.Controllers
 
             scheduleRepo.Create(schedule);
 
-                return "";
+            return "";
         }
 
         public IActionResult DeleteSchedule(int id)
@@ -149,7 +150,7 @@ namespace DLA_Thesis.Controllers
                             a.ScheduleID != schedule.ScheduleID && a.EndTime >= schedule.EndTime && a.EndTime <= schedule.EndTime && a.SectionNumber == getSection.SectionNumber);
             if (checkSched != null)
                 return "time_discrepancy";
-                
+
 
             if (schedule.EndTime <= schedule.StartTime)
                 return "time_error";
