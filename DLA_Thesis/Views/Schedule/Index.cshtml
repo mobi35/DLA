@@ -301,9 +301,9 @@
                 <select id="gradeAndSec" class="form-control">
                     <option>Choose grade and section</option>
                     @{
-                        foreach (var m in GradeRepo.GetAll())
+                        foreach (var m in SectionRepository.GetAll())
                         {
-                            <option value="@SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionNumber - @SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionName">Grade @m.GradeLevel - @SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionNumber - @SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionName</option>
+                            <option value="@SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionNumber - @SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionName">Grade @m.Grade - @SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionNumber - @SectionRepository.FindSection(a => a.SectionID == m.SectionID).SectionName</option>
                         }
                     }
 
